@@ -1,0 +1,483 @@
+/* ================================================
+   MANAGE PAGE
+   ================================================ */
+
+/* ---- Tab Bar ---- */
+.manage-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 28px;
+}
+
+.manage-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-family: var(--font);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: all var(--transition);
+}
+
+.manage-tab:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.manage-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: transparent;
+}
+
+.manage-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ---- Content area ---- */
+.manage-content {
+  animation: fadeIn 0.2s ease;
+}
+
+/* ---- Create subcategory card ---- */
+.manage-create-card {
+  padding: 28px 32px;
+  margin-bottom: 32px;
+}
+
+.manage-create-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* New v2 form layout */
+.manage-create-form-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.manage-create-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.manage-create-row-bottom {
+  align-items: center;
+}
+
+.manage-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.manage-field-grow {
+  flex: 1;
+}
+
+.manage-field-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ---- Icon picker ---- */
+.manage-icon-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manage-icon-picker-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.manage-icon-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.manage-icon-placeholder:hover {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.manage-icon-preview-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.manage-icon-preview {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: 2px solid var(--accent);
+  display: block;
+}
+
+.manage-icon-clear {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: background var(--transition);
+}
+
+.manage-icon-clear:hover {
+  background: #dc2626;
+}
+
+.manage-create-btn {
+  white-space: nowrap;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  margin-left: auto;
+}
+
+/* ---- Sections layout ---- */
+.subcats-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.subcats-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.subcats-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.subcats-section-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--accent);
+}
+
+.subcats-section-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.subcat-empty-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 24px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* ---- Subcat cards ---- */
+.subcats-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.subcat-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+.subcat-card:last-child {
+  border-bottom: none;
+}
+
+.subcat-card:hover {
+  background: var(--accent-subtle);
+}
+
+.subcat-card-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-md);
+  background: var(--accent-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.subcat-card-icon-change {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition);
+  border-radius: inherit;
+}
+
+.subcat-card:hover .subcat-card-icon-change {
+  opacity: 1;
+}
+
+.subcat-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.subcat-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subcat-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subcat-card-count {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.subcat-card-rename {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.subcat-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ---- PDF toolbar ---- */
+.manage-pdf-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.manage-pdf-toolbar select {
+  min-width: 220px;
+  max-width: 300px;
+}
+
+.manage-pdf-count {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ---- PDF list ---- */
+.manage-pdf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.manage-pdf-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition);
+}
+
+.manage-pdf-item:hover {
+  border-color: rgba(16, 185, 129, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.manage-pdf-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.manage-pdf-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.manage-pdf-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.manage-pdf-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.manage-pdf-cat {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.manage-pdf-sep {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.manage-pdf-subcat {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.manage-pdf-rename {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.manage-pdf-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ---- Shared modals (delete + move) are in Dashboard.css ---- */
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .manage-tabs {
+    overflow-x: auto;
+  }
+
+  .manage-create-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .manage-field-group {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .manage-create-btn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .manage-pdf-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .manage-pdf-toolbar select {
+    width: 100%;
+    max-width: unset;
+  }
+
+  .subcat-card {
+    padding: 14px 16px;
+  }
+}

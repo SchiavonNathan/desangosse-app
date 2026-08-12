@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Prisma & Database
+/generated/prisma
+dev.db
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Logs & temp
+*.log
+.DS_Store
