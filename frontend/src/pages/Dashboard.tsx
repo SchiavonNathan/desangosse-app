@@ -197,7 +197,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="category-grid animate-fade-in">
-            {CATEGORIES.map(({ key, label, image, icon: Icon }) => {
+            {CATEGORIES.map(({ key, label, icon: Icon }) => {
               const count = pdfs.filter((p) => p.category === key).length;
               return (
                 <div
