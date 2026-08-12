@@ -31,10 +31,10 @@ interface PdfMetadata {
 }
 
 const CATEGORIES = [
-  { key: 'Produtos e tabelas', label: 'Produtos e Tabelas', image: '/categories/produtos.png', icon: FileSpreadsheet },
-  { key: 'Culturas',           label: 'Culturas',           image: '/categories/culturas.png', icon: BookOpen },
-  { key: 'Resultados',         label: 'Resultados',         image: '/categories/resultados.png', icon: Award },
-  { key: 'Palestras',          label: 'Palestras',          image: '/categories/palestras.png', icon: FileText },
+  { key: 'Produtos e tabelas', label: 'Produtos e Tabelas', icon: FileSpreadsheet },
+  { key: 'Culturas',           label: 'Culturas',           icon: BookOpen },
+  { key: 'Resultados',         label: 'Resultados',         icon: Award },
+  { key: 'Palestras',          label: 'Palestras',          icon: FileText },
 ];
 
 export default function Dashboard() {
@@ -206,11 +206,7 @@ export default function Dashboard() {
                   onClick={() => navigate(`/dashboard?category=${encodeURIComponent(key)}`)}
                 >
                   <div className="category-card-icon">
-                    <img src={image} alt={label} className="category-card-img" onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling?.removeAttribute('style');
-                    }} />
-                    <Icon size={34} color="var(--accent)" style={{ display: 'none' }} />
+                    <Icon size={34} color="var(--accent)" />
                   </div>
                   <div className="category-card-info">
                     <h3>{label}</h3>

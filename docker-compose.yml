@@ -6,10 +6,10 @@ services:
     container_name: app_desangosse_backend
     restart: unless-stopped
     ports:
-      - "${BACKEND_PORT:-3001}:3000"
+      - "${BACKEND_PORT:-3001}:3001"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3001
       - DATABASE_URL=file:/app/data/dev.db
       - JWT_SECRET=${JWT_SECRET:-change_this_secret_in_production_with_crypto_random_bytes}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-8h}
@@ -25,7 +25,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:3001}
     container_name: app_desangosse_frontend
     restart: unless-stopped
     ports:
