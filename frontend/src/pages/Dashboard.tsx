@@ -11,6 +11,7 @@ import { api, resolveApiUrl } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 import { toast } from 'sonner';
 import './Dashboard.css';
+import XlsxViewer from '../components/XlsxViewer';
 
 interface Subcategory {
   id: string;
@@ -424,13 +425,7 @@ export default function Dashboard() {
             </div>
             <div className="pdf-modal-body">
               {selectedPdf.name.toLowerCase().endsWith('.xlsx') ? (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '1rem', color: '#64748b' }}>
-                  <FileSpreadsheet size={48} color="var(--accent)" />
-                  <p>Planilhas Excel não podem ser visualizadas diretamente no navegador.</p>
-                  <a href={resolveApiUrl(selectedPdf.url_download)} download className="btn btn-primary" style={{ marginTop: '1rem' }}>
-                    <Download size={18} /> Baixar Planilha
-                  </a>
-                </div>
+                <XlsxViewer url={resolveApiUrl(selectedPdf.url_download)} />
               ) : (
                 <iframe src={resolveApiUrl(selectedPdf.url_download)} title={selectedPdf.name} className="pdf-iframe" />
               )}
