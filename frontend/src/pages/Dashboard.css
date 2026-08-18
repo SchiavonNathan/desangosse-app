@@ -4,17 +4,17 @@
 
 /* ---- CATEGORY GRID (Home view) ---- */
 .category-grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin-top: 8px;
 }
 
 .category-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 28px 32px;
+  padding: 0;
   cursor: pointer;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-lg);
@@ -23,6 +23,7 @@
   transition: all var(--transition-slow);
   position: relative;
   overflow: hidden;
+  height: 250px;
 }
 
 .category-card::after {
@@ -46,19 +47,23 @@
 }
 
 .category-card-icon {
-  width: 68px;
-  height: 68px;
-  border-radius: var(--radius-md);
-  background: var(--accent-subtle);
+  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  background: var(--accent-subtle);
   transition: background var(--transition);
 }
 
 .category-card:hover .category-card-icon {
   background: var(--accent-subtle-hover);
+}
+
+.category-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .dashboard-subcat-icon {
@@ -69,8 +74,12 @@
 }
 
 .category-card-info {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  z-index: 2;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
 }
 
 .category-card-info h3 {
@@ -86,14 +95,7 @@
 }
 
 .category-card-arrow {
-  color: var(--text-muted);
-  transition: all var(--transition);
-  flex-shrink: 0;
-}
-
-.category-card:hover .category-card-arrow {
-  color: var(--accent);
-  transform: translateX(4px);
+  display: none;
 }
 
 /* ---- CATEGORY HEADER (Document view) ---- */

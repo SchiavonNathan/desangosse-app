@@ -32,10 +32,10 @@ interface PdfMetadata {
 }
 
 const CATEGORIES = [
-  { key: 'Produtos e tabelas', label: 'Produtos e Tabelas', icon: FileSpreadsheet },
-  { key: 'Culturas',           label: 'Culturas',           icon: BookOpen },
-  { key: 'Resultados',         label: 'Resultados',         icon: Award },
-  { key: 'Palestras',          label: 'Palestras',          icon: FileText },
+  { key: 'Produtos e tabelas', label: 'Produtos e Tabelas', image: '/categories/produtos.png', icon: FileSpreadsheet },
+  { key: 'Culturas',           label: 'Culturas',           image: '/categories/culturas.png', icon: BookOpen },
+  { key: 'Resultados',         label: 'Resultados',         image: '/categories/resultados.png', icon: Award },
+  { key: 'Palestras',          label: 'Palestras',          image: '/categories/palestras.png', icon: FileText },
 ];
 
 export default function Dashboard() {
@@ -198,7 +198,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="category-grid animate-fade-in">
-            {CATEGORIES.map(({ key, label, icon: Icon }) => {
+            {CATEGORIES.map(({ key, label, image, icon: Icon }) => {
               const count = pdfs.filter((p) => p.category === key).length;
               return (
                 <div
@@ -206,14 +206,17 @@ export default function Dashboard() {
                   className="category-card"
                   onClick={() => navigate(`/dashboard?category=${encodeURIComponent(key)}`)}
                 >
-                  <div className="category-card-icon">
-                    <Icon size={34} color="var(--accent)" />
-                  </div>
                   <div className="category-card-info">
                     <h3>{label}</h3>
                     <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
                   </div>
-                  <ChevronRight size={24} className="category-card-arrow" />
+                  <div className="category-card-icon">
+                    <img src={image} alt={label} className="category-card-img" onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.removeAttribute('style');
+                    }} />
+                    <Icon size={34} color="var(--accent)" style={{ display: 'none' }} />
+                  </div>
                 </div>
               );
             })}
@@ -259,6 +262,10 @@ export default function Dashboard() {
                   className="category-card"
                   onClick={() => navigate(`/dashboard?category=${encodeURIComponent(categoryParam)}&sub=${sub.id}`)}
                 >
+                  <div className="category-card-info">
+                    <h3>{sub.name}</h3>
+                    <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
+                  </div>
                   <div className="category-card-icon">
                     {sub.iconUrl ? (
                       <img src={resolveApiUrl(sub.iconUrl)} alt="Ícone" className="dashboard-subcat-icon" />
@@ -266,11 +273,6 @@ export default function Dashboard() {
                       <Folder size={34} color="var(--accent)" />
                     )}
                   </div>
-                  <div className="category-card-info">
-                    <h3>{sub.name}</h3>
-                    <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
-                  </div>
-                  <ChevronRight size={24} className="category-card-arrow" />
                 </div>
               );
             })}
