@@ -29,7 +29,7 @@
 }
 
 .xlsx-table th {
-  background: var(--background);
+  background: #ffffff;
   font-weight: 600;
   color: var(--text);
   position: sticky;
