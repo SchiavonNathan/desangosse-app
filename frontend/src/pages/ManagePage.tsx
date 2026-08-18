@@ -35,7 +35,7 @@ interface PdfItem {
   subcategoryName: string | null;
 }
 
-type Tab = 'subcategories' | 'pdfs';
+type Tab = 'subcategories' | 'pdfs' | 'categories';
 
 export default function ManagePage() {
   const [activeTab, setActiveTab] = useState<Tab>('subcategories');
@@ -68,6 +68,25 @@ export default function ManagePage() {
   const [moveSubcategoryId, setMoveSubcategoryId] = useState('');
   const [moving, setMoving] = useState(false);
   const [pdfFilterCategory, setPdfFilterCategory] = useState('');
+
+  // ---- Category Images State ----
+  const [updatingCategory, setUpdatingCategory] = useState<string | null>(null);
+  const categoryImageRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  const handleUpdateCategoryImage = async (categoryName: string, file: File) => {
+    setUpdatingCategory(categoryName);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      await api.post(`/categories/${encodeURIComponent(categoryName)}/image`, formData);
+      toast.success('Imagem da categoria atualizada!');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch {
+      toast.error('Erro ao atualizar imagem.');
+    } finally {
+      setUpdatingCategory(null);
+    }
+  };
 
   // ---- Load data ----
   const fetchSubs = async () => {
@@ -257,7 +276,82 @@ export default function ManagePage() {
           Documentos
           {pdfs.length > 0 && <span className="manage-tab-badge">{pdfs.length}</span>}
         </button>
+        <button
+          className={`manage-tab ${activeTab === 'categories' ? 'active' : ''}`}
+          onClick={() => setActiveTab('categories')}
+        >
+          <ImageIcon size={16} />
+          Categorias Principais
+        </button>
       </div>
+
+      {/* ===== TAB: CATEGORIES ===== */}
+      {activeTab === 'categories' && (
+        <div className="manage-content animate-fade-in">
+          <div className="card manage-list-card">
+            <h3>Gerenciar Imagens das Categorias</h3>
+            <p className="text-muted" style={{ marginBottom: 16 }}>
+              Altere a imagem de fundo que aparece para cada categoria na tela de Início.
+            </p>
+            <div className="manage-table-wrapper">
+              <table className="manage-table">
+                <thead>
+                  <tr>
+                    <th>Categoria</th>
+                    <th style={{ width: '150px' }}>Imagem Atual</th>
+                    <th style={{ width: '200px' }}>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CATEGORIES.map(cat => (
+                    <tr key={cat}>
+                      <td>
+                        <strong>{cat}</strong>
+                      </td>
+                      <td>
+                        <img 
+                          src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(cat)}?t=${Date.now()}`)} 
+                          alt={cat}
+                          style={{ width: 80, height: 60, objectFit: 'cover', borderRadius: 4, background: '#f0f0f0' }}
+                          onError={(e) => {
+                            // Fallback se não existir imagem no backend
+                            e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="60" fill="%23ccc"><rect width="80" height="60"/></svg>';
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <div className="manage-actions">
+                          <input
+                            type="file"
+                            accept="image/jpeg, image/png, image/webp"
+                            style={{ display: 'none' }}
+                            ref={el => { categoryImageRefs.current[cat] = el; }}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleUpdateCategoryImage(cat, file);
+                            }}
+                          />
+                          <button 
+                            className="btn-icon" 
+                            title="Alterar imagem"
+                            onClick={() => categoryImageRefs.current[cat]?.click()}
+                            disabled={updatingCategory === cat}
+                          >
+                            <Camera size={18} />
+                            <span style={{ marginLeft: 8, fontSize: '0.85rem' }}>
+                              {updatingCategory === cat ? 'Enviando...' : 'Alterar Foto'}
+                            </span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ===== TAB: SUBCATEGORIES ===== */}
       {activeTab === 'subcategories' && (

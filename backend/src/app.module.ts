@@ -9,6 +9,7 @@ import { SubcategoriesModule } from './subcategories/subcategories.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
+import { CategoriesController } from './categories/categories.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule,
     SubcategoriesModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, CategoriesController],
   providers: [
     AppService,
     {
