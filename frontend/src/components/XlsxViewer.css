@@ -4,48 +4,136 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: var(--surface);
+  background: #f8fafc;
   border-radius: var(--radius-md);
 }
 
+/* ---- Sheet Tabs ---- */
+.xlsx-sheet-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 12px;
+  background: #e2e8f0;
+  border-bottom: 2px solid #cbd5e1;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.xlsx-sheet-tab {
+  padding: 8px 18px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.xlsx-sheet-tab:hover {
+  color: #334155;
+  background: rgba(255,255,255,0.5);
+}
+
+.xlsx-sheet-tab.active {
+  color: #0f172a;
+  background: #ffffff;
+  border-bottom-color: #10b981;
+  font-weight: 600;
+}
+
+/* ---- Table Wrapper ---- */
 .xlsx-table-wrapper {
   flex: 1;
   overflow: auto;
-  padding: 1rem;
+  min-height: 0;
 }
 
+/* ---- Table ---- */
 .xlsx-table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   text-align: left;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .xlsx-table th,
 .xlsx-table td {
-  border: 1px solid var(--border);
-  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
   white-space: nowrap;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Header row */
 .xlsx-table th {
-  background: #ffffff;
+  background: #f1f5f9;
   font-weight: 600;
-  color: var(--text);
+  color: #1e293b;
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 1px 0 var(--border);
+  border-bottom: 2px solid #cbd5e1;
 }
 
+/* Row number column */
+.xlsx-row-number {
+  background: #f1f5f9 !important;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-align: center;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  font-weight: 500;
+  border-right: 2px solid #cbd5e1 !important;
+}
+
+/* Corner cell: row number in header */
+th.xlsx-row-number {
+  z-index: 15;
+}
+
+/* Body rows */
 .xlsx-table tbody tr {
-  transition: background-color var(--transition);
+  transition: background-color 0.1s ease;
+}
+
+.xlsx-table tbody tr:nth-child(even) {
+  background: #fafbfc;
 }
 
 .xlsx-table tbody tr:hover {
-  background: var(--background);
+  background: #eff6ff;
 }
 
+.xlsx-table tbody td {
+  color: #334155;
+}
+
+/* ---- Status Bar ---- */
+.xlsx-statusbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 16px;
+  font-size: 0.75rem;
+  color: #64748b;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+/* ---- Loading / Error / Empty states ---- */
 .xlsx-loading, .xlsx-error, .xlsx-empty {
   display: flex;
   flex-direction: column;
@@ -57,5 +145,5 @@
 }
 
 .xlsx-error {
-  color: #ef4444; /* red */
+  color: #ef4444;
 }

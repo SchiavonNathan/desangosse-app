@@ -6,6 +6,7 @@ import {
   FileText, Download, Eye, X, ExternalLink, Pencil,
   Check, XCircle, ChevronRight, FileSpreadsheet,
   BookOpen, Award, ArrowLeft, Trash2, AlertTriangle, Folder, FolderOpen,
+  Maximize2, Minimize2,
 } from 'lucide-react';
 import { api, resolveApiUrl } from '../services/api';
 import { useAuthStore } from '../store/authStore';
@@ -48,6 +49,7 @@ export default function Dashboard() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [modalExpanded, setModalExpanded] = useState(false);
 
   // ---- Move state ----
   const [movingPdf, setMovingPdf] = useState<PdfMetadata | null>(null);
@@ -407,8 +409,8 @@ export default function Dashboard() {
       )}
 
       {selectedPdf && createPortal(
-        <div className="pdf-modal-overlay animate-fade-in" onClick={() => setSelectedPdf(null)}>
-          <div className="pdf-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="pdf-modal-overlay animate-fade-in" onClick={() => { setSelectedPdf(null); setModalExpanded(false); }}>
+          <div className={`pdf-modal ${modalExpanded ? 'pdf-modal-expanded' : ''}`} onClick={(e) => e.stopPropagation()}>
             <div className="pdf-modal-header">
               <div className="pdf-modal-title">
                 {selectedPdf.name.toLowerCase().endsWith('.xlsx') ? (
@@ -419,13 +421,20 @@ export default function Dashboard() {
                 <span>{selectedPdf.name}</span>
               </div>
               <div className="pdf-modal-actions">
+                <button
+                  className="btn btn-ghost btn-icon btn-sm"
+                  onClick={() => setModalExpanded(prev => !prev)}
+                  title={modalExpanded ? 'Reduzir' : 'Expandir'}
+                >
+                  {modalExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+                </button>
                 <a href={resolveApiUrl(selectedPdf.url_download)} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-icon btn-sm">
                   <ExternalLink size={16} />
                 </a>
                 <a href={resolveApiUrl(selectedPdf.url_download)} download className="btn btn-primary btn-icon btn-sm">
                   <Download size={16} />
                 </a>
-                <button className="btn btn-ghost btn-icon btn-sm" onClick={() => setSelectedPdf(null)}>
+                <button className="btn btn-ghost btn-icon btn-sm" onClick={() => { setSelectedPdf(null); setModalExpanded(false); }}>
                   <X size={16} />
                 </button>
               </div>
