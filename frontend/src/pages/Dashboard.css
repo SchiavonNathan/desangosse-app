@@ -99,6 +99,8 @@
   flex-direction: column;
   gap: 16px;
   margin-top: 8px;
+  /* Fill remaining viewport height: 100vh minus top padding (40px) minus breadcrumb/header (~60px) minus gap */
+  min-height: calc(100vh - 140px);
 }
 
 .category-card {
@@ -114,6 +116,7 @@
   transition: all var(--transition-slow);
   position: relative;
   overflow: hidden;
+  flex: 1; /* each card stretches equally to fill available space */
 }
 
 .category-card::after {
