@@ -6,8 +6,11 @@
 .main-category-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr 1fr;
   gap: 16px;
   margin-top: 8px;
+  /* Fill remaining viewport height: 100vh minus top padding (40px) minus page-header (~80px) minus gap */
+  height: calc(100vh - 160px);
 }
 
 .main-category-card {
@@ -23,7 +26,7 @@
   transition: all var(--transition-slow);
   position: relative;
   overflow: hidden;
-  height: 250px;
+  min-height: 0; /* allow shrinking in grid */
 }
 
 .main-category-card::after {
@@ -49,11 +52,13 @@
 .main-category-card-icon {
   width: 100%;
   flex: 1;
+  min-height: 0; /* critical: allows the flex child to shrink below content size */
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-subtle);
   transition: background var(--transition);
+  overflow: hidden;
 }
 
 .main-category-card:hover .main-category-card-icon {
@@ -68,22 +73,23 @@
 
 .main-category-card-info {
   width: 100%;
-  padding: 16px;
+  padding: 14px 16px;
   text-align: center;
   z-index: 2;
   background: var(--surface);
   border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0; /* title never shrinks */
 }
 
 .main-category-card-info h3 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .main-category-card-info span {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
 }
 
