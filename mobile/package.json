@@ -17,7 +17,7 @@
     "react": "19.2.3",
     "react-native": "0.85.3",
     "react-native-blob-util": "^0.24.9",
-    "react-native-pdf": "github:wonday/react-native-pdf",
+    "react-native-pdf": "^7.0.5",
     "react-native-safe-area-context": "^5.8.0",
     "react-native-screens": "^4.25.2",
     "zustand": "^5.0.14"

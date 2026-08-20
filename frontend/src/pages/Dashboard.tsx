@@ -269,16 +269,16 @@ export default function Dashboard() {
                   className="category-card"
                   onClick={() => navigate(`/dashboard?category=${encodeURIComponent(categoryParam)}&sub=${sub.id}`)}
                 >
-                  <div className="category-card-info">
-                    <h3>{sub.name}</h3>
-                    <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
-                  </div>
                   <div className="category-card-icon">
                     {sub.iconUrl ? (
                       <img src={resolveApiUrl(sub.iconUrl)} alt="Ícone" className="dashboard-subcat-icon" />
                     ) : (
                       <Folder size={34} color="var(--accent)" />
                     )}
+                  </div>
+                  <div className="category-card-info">
+                    <h3>{sub.name}</h3>
+                    <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
                   </div>
                 </div>
               );

@@ -140,8 +140,8 @@
 }
 
 .category-card-icon {
-  width: 68px;
-  height: 68px;
+  width: 120px;
+  align-self: stretch;
   border-radius: var(--radius-md);
   background: var(--accent-subtle);
   display: flex;
@@ -149,6 +149,7 @@
   justify-content: center;
   flex-shrink: 0;
   transition: background var(--transition);
+  overflow: hidden;
 }
 
 .category-card:hover .category-card-icon {
@@ -158,7 +159,7 @@
 .dashboard-subcat-icon {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: inherit;
 }
 
