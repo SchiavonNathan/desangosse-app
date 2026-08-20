@@ -214,7 +214,7 @@ export default function Dashboard() {
                   </div>
                   <div className="main-category-card-icon">
                     <img 
-                      src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(key)}`)} 
+                      src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(key)}?t=${Date.now()}`)} 
                       alt={label} 
                       className="main-category-card-img" 
                       onError={(e) => {
