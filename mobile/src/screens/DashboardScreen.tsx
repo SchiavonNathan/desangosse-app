@@ -18,6 +18,7 @@ export default function DashboardScreen({ navigation }: any) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefresh] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [hiddenCategories, setHiddenCategories] = useState<string[]>([]);
   const { user, logout } = useAuthStore();
 
   useEffect(() => {

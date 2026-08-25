@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "DE SANGOSSE by DSG",
-    "slug": "mobile",
+    "slug": "desangosse-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.nathanschiavon.mobile"
+      "package": "com.nathanschiavon.desangosse"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -26,6 +26,12 @@
     "plugins": [
       "expo-sqlite",
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "86ba56ed-e5ce-429b-aa47-bc580591008d"
+      }
+    },
+    "owner": "nathanschiavon"
   }
 }
