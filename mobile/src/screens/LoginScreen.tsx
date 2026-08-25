@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import api from '../services/api';
-import { LogIn } from 'lucide-react-native';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
@@ -31,10 +30,9 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.card}>
         <View style={styles.iconContainer}>
-          <LogIn size={48} color="#6366f1" />
+          <Image source={require('../../assets/desangosse.png')} style={styles.logo} resizeMode="contain" />
         </View>
-        <Text style={styles.title}>PDF Hub Mobile</Text>
-        <Text style={styles.subtitle}>Acesse o repositório offline</Text>
+        <Text style={styles.title}>DE SANGOSSE by DSG</Text>
 
         <TextInput
           style={styles.input}
@@ -83,6 +81,10 @@ const styles = StyleSheet.create({
   iconContainer: {
     alignItems: 'center',
     marginBottom: 16,
+  },
+  logo: {
+    width: 140,
+    height: 140,
   },
   title: {
     fontSize: 24,

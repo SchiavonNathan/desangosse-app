@@ -117,8 +117,7 @@ export class PdfsController {
 
     const hash = createHash('sha256').update(fileBuffer).digest('hex');
 
-    const port = process.env.PORT ?? 3001;
-    const url = `http://localhost:${port}/pdfs/download/${file.filename}`;
+    const url = `/pdfs/download/${file.filename}`;
 
     const pdf = await this.prisma.pdf.create({
       data: {

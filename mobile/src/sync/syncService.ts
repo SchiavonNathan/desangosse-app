@@ -13,13 +13,21 @@ interface ApiPdf {
   subcategoryName?: string | null;
 }
 
+let isSyncing = false;
+
 export async function syncPdfs() {
+  if (isSyncing) {
+    console.log('[SyncService] Sync already in progress. Skipping.');
+    return;
+  }
+
   const state = await NetInfo.fetch();
   if (!state.isConnected) {
     console.log('[SyncService] Offline. Skipping sync.');
     return;
   }
 
+  isSyncing = true;
   try {
     console.log('[SyncService] Online. Starting sync...');
     const response = await api.get<ApiPdf[]>('/pdfs');
@@ -67,7 +75,9 @@ export async function syncPdfs() {
             fileUri
           );
           
-          if (downloadRes.status === 200) {
+          console.log(`[SyncService] Download status: ${downloadRes.status} para ${remote.name}`);
+
+          if (downloadRes.status >= 200 && downloadRes.status < 300) {
             await insertOrUpdatePdf({
               id: remote.id,
               name: remote.name,
@@ -79,6 +89,8 @@ export async function syncPdfs() {
               subcategoryName: remote.subcategoryName ?? null,
             });
             console.log(`[SyncService] Sucesso: ${remote.name}`);
+          } else {
+            console.error(`[SyncService] Download falhou com status ${downloadRes.status} para ${remote.name}`);
           }
         } catch (downloadErr) {
           console.error(`[SyncService] Falha no download de ${remote.name}`, downloadErr);
@@ -88,16 +100,24 @@ export async function syncPdfs() {
     console.log('[SyncService] Sync Finalizado.');
   } catch (err) {
     console.error('[SyncService] Falha de comunicação com API', err);
+  } finally {
+    isSyncing = false;
   }
 }
 
 // Inicia o listener de rede que dispara a sincronização silenciosa
 export function startNetworkListener(onSyncEnd?: () => void) {
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
   return NetInfo.addEventListener(state => {
     if (state.isConnected && state.isInternetReachable) {
-      syncPdfs().then(() => {
-        if (onSyncEnd) onSyncEnd();
-      });
+      // Debounce para evitar múltiplas chamadas seguidas
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        syncPdfs().then(() => {
+          if (onSyncEnd) onSyncEnd();
+        });
+      }, 2000);
     }
   });
 }

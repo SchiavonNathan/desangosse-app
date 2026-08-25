@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 
 export async function initDatabase() {
-  const db = await SQLite.openDatabaseAsync('pdfs.db');
+  const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
   
   await db.execAsync(`
     PRAGMA journal_mode = WAL;
@@ -29,12 +29,12 @@ export async function initDatabase() {
 }
 
 export async function getLocalPdfs() {
-  const db = await SQLite.openDatabaseAsync('pdfs.db');
+  const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
   return await db.getAllAsync('SELECT * FROM local_pdfs ORDER BY name ASC');
 }
 
 export async function insertOrUpdatePdf(pdf: { id: string, name: string, hash: string, url: string, localUri: string, category: string, subcategoryId?: string | null, subcategoryName?: string | null }) {
-  const db = await SQLite.openDatabaseAsync('pdfs.db');
+  const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
   await db.runAsync(
     `INSERT INTO local_pdfs (id, name, hash, url, localUri, category, subcategoryId, subcategoryName) 
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -51,6 +51,6 @@ export async function insertOrUpdatePdf(pdf: { id: string, name: string, hash: s
 }
 
 export async function deletePdf(id: string) {
-  const db = await SQLite.openDatabaseAsync('pdfs.db');
+  const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
   await db.runAsync('DELETE FROM local_pdfs WHERE id = ?', id ?? null);
 }
