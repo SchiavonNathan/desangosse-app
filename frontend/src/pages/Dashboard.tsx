@@ -42,6 +42,7 @@ const CATEGORIES = [
 export default function Dashboard() {
   const [pdfs, setPdfs] = useState<PdfMetadata[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [hiddenCategories, setHiddenCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPdf, setSelectedPdf] = useState<PdfMetadata | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -66,12 +67,14 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [pdfsRes, subsRes] = await Promise.all([
+        const [pdfsRes, subsRes, hiddenRes] = await Promise.all([
           api.get('/pdfs'),
           api.get('/subcategories'),
+          api.get('/categories/hidden').catch(() => ({ data: [] })),
         ]);
         setPdfs(pdfsRes.data);
         setSubcategories(subsRes.data);
+        setHiddenCategories(hiddenRes.data);
       } catch {
         toast.error('Erro ao carregar documentos.');
       } finally {

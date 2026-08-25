@@ -2,7 +2,9 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Param,
+  Body,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
@@ -20,6 +22,26 @@ import { Roles } from '../auth/roles.decorator';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const HIDDEN_CATEGORIES_FILE = join(process.cwd(), 'uploads', 'hidden-categories.json');
+
+function readHiddenCategories(): string[] {
+  try {
+    if (fs.existsSync(HIDDEN_CATEGORIES_FILE)) {
+      const data = fs.readFileSync(HIDDEN_CATEGORIES_FILE, 'utf-8');
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch { /* ignore parse errors */ }
+  return [];
+}
+
+function writeHiddenCategories(hidden: string[]): void {
+  const dir = join(process.cwd(), 'uploads');
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(HIDDEN_CATEGORIES_FILE, JSON.stringify(hidden, null, 2), 'utf-8');
+}
 
 @Controller('categories')
 export class CategoriesController {
@@ -105,5 +127,22 @@ export class CategoriesController {
       }
     }
     res.status(404).send('Image not found');
+  }
+
+  @Get('hidden')
+  @UseGuards(JwtAuthGuard)
+  getHiddenCategories() {
+    return readHiddenCategories();
+  }
+
+  @Patch('hidden')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  updateHiddenCategories(@Body() body: { hidden: string[] }) {
+    if (!body.hidden || !Array.isArray(body.hidden)) {
+      throw new BadRequestException('O campo "hidden" deve ser um array de strings.');
+    }
+    writeHiddenCategories(body.hidden);
+    return { message: 'Categorias ocultas atualizadas.', hidden: body.hidden };
   }
 }

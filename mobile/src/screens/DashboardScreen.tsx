@@ -4,6 +4,7 @@ import { getLocalPdfs } from '../database/schema';
 import { syncPdfs, startNetworkListener } from '../sync/syncService';
 import { useAuthStore } from '../store/authStore';
 import { FileText, LogOut, RefreshCw } from 'lucide-react-native';
+import api from '../services/api';
 
 const CATEGORIES = [
   'Produtos e tabelas',
@@ -77,7 +78,7 @@ export default function DashboardScreen({ navigation }: any) {
   const sections = (() => {
     const result: { title: string; categoryTitle: string; isSubcatHeader: boolean; data: any[] }[] = [];
 
-    for (const cat of CATEGORIES) {
+    for (const cat of CATEGORIES.filter(c => !hiddenCategories.includes(c))) {
       const catPdfs = pdfs.filter(p => (p.category || 'Produtos e tabelas') === cat);
       if (catPdfs.length === 0) continue;
 
