@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001',
+  baseURL: process.env.EXPO_PUBLIC_API_URL || 'https://cht-desangosse.com.br/api',
 });
 
 api.interceptors.response.use(

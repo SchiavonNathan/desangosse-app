@@ -62,7 +62,7 @@ export async function syncPdfs() {
         const fileUri = `${FileSystem.documentDirectory}${remote.id}.pdf`;
         
         try {
-          const baseUrl = api.defaults.baseURL || 'http://192.168.200.103:3001';
+          const baseUrl = api.defaults.baseURL || 'https://cht-desangosse.com.br/api';
           let downloadUrl = remote.url_download;
           if (downloadUrl.startsWith('/')) {
             downloadUrl = `${baseUrl}${downloadUrl}`;
