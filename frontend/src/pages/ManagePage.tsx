@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import {
   FolderPlus, Pencil, Check, XCircle, Trash2, AlertTriangle,
   FileText, FolderOpen, Layers, FileCog, ImageIcon, X, Camera,
+  Eye, EyeOff,
 } from 'lucide-react';
 import { api, resolveApiUrl } from '../services/api';
 import { toast } from 'sonner';
@@ -71,6 +72,35 @@ export default function ManagePage() {
 
   // ---- Category Images State ----
   const [updatingCategory, setUpdatingCategory] = useState<string | null>(null);
+  const [hiddenCategories, setHiddenCategories] = useState<string[]>([]);
+  const [togglingCategory, setTogglingCategory] = useState<string | null>(null);
+
+  const fetchHiddenCategories = async () => {
+    try {
+      const res = await api.get('/categories/hidden');
+      setHiddenCategories(res.data || []);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleToggleHideCategory = async (cat: string) => {
+    setTogglingCategory(cat);
+    const isHidden = hiddenCategories.includes(cat);
+    const updated = isHidden
+      ? hiddenCategories.filter(c => c !== cat)
+      : [...hiddenCategories, cat];
+
+    try {
+      await api.patch('/categories/hidden', { hidden: updated });
+      setHiddenCategories(updated);
+      toast.success(isHidden ? `Categoria "${cat}" agora está visível na tela inicial.` : `Categoria "${cat}" ocultada da tela inicial.`);
+    } catch {
+      toast.error('Erro ao atualizar visibilidade da categoria.');
+    } finally {
+      setTogglingCategory(null);
+    }
+  };
   const categoryImageRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const handleUpdateCategoryImage = async (categoryName: string, file: File) => {
@@ -108,6 +138,7 @@ export default function ManagePage() {
   useEffect(() => {
     fetchSubs();
     fetchPdfs();
+    fetchHiddenCategories();
   }, []);
 
   // ---- Icon preview ----
@@ -289,63 +320,108 @@ export default function ManagePage() {
       {activeTab === 'categories' && (
         <div className="manage-content animate-fade-in">
           <div className="card manage-list-card">
-            <h3>Gerenciar Imagens das Categorias</h3>
-            <p className="text-muted" style={{ marginBottom: 16 }}>
-              Altere a imagem de fundo que aparece para cada categoria na tela de Início.
-            </p>
+            <div style={{ marginBottom: 18 }}>
+              <h3>Gerenciar Categorias Principais</h3>
+              <p className="text-muted" style={{ margin: 0, marginTop: 4 }}>
+                Altere a imagem de fundo ou oculte/exiba as categorias que aparecem no menu da tela de Início (Dashboard).
+              </p>
+            </div>
             <div className="manage-table-wrapper">
               <table className="manage-table">
                 <thead>
                   <tr>
                     <th>Categoria</th>
-                    <th style={{ width: '150px' }}>Imagem Atual</th>
-                    <th style={{ width: '200px' }}>Ações</th>
+                    <th style={{ width: '160px' }}>Visibilidade</th>
+                    <th style={{ width: '130px' }}>Imagem Atual</th>
+                    <th style={{ width: '260px', textAlign: 'right' }}>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {CATEGORIES.map(cat => (
-                    <tr key={cat}>
-                      <td>
-                        <strong>{cat}</strong>
-                      </td>
-                      <td>
-                        <img 
-                          src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(cat)}?t=${Date.now()}`)} 
-                          alt={cat}
-                          style={{ width: 80, height: 60, objectFit: 'cover', borderRadius: 4, background: '#f0f0f0' }}
-                          onError={(e) => {
-                            // Fallback se não existir imagem no backend
-                            e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="60" fill="%23ccc"><rect width="80" height="60"/></svg>';
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <div className="manage-actions">
-                          <input
-                            type="file"
-                            accept="image/jpeg, image/png, image/webp"
-                            style={{ display: 'none' }}
-                            ref={el => { categoryImageRefs.current[cat] = el; }}
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) handleUpdateCategoryImage(cat, file);
+                  {CATEGORIES.map(cat => {
+                    const isHidden = hiddenCategories.includes(cat);
+                    const isToggling = togglingCategory === cat;
+                    return (
+                      <tr key={cat} style={{ opacity: isHidden ? 0.7 : 1 }}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <strong>{cat}</strong>
+                            {isHidden && (
+                              <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: '12px', background: 'var(--surface-2)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>
+                                Oculta
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td>
+                          {isHidden ? (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', fontSize: '0.8rem', borderRadius: 6, background: 'rgba(239, 68, 68, 0.12)', color: '#ef4444', fontWeight: 600 }}>
+                              <EyeOff size={14} /> Oculta na Início
+                            </span>
+                          ) : (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', fontSize: '0.8rem', borderRadius: 6, background: 'rgba(16, 185, 129, 0.12)', color: '#10b981', fontWeight: 600 }}>
+                              <Eye size={14} /> Visível na Início
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          <img 
+                            src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(cat)}?t=${Date.now()}`)} 
+                            alt={cat}
+                            style={{ width: 80, height: 54, objectFit: 'cover', borderRadius: 6, background: '#f0f0f0', border: '1px solid var(--border)' }}
+                            onError={(e) => {
+                              e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="54" fill="%23ccc"><rect width="80" height="54"/></svg>';
                             }}
                           />
-                          <button 
-                            className="btn-icon" 
-                            title="Alterar imagem"
-                            onClick={() => categoryImageRefs.current[cat]?.click()}
-                            disabled={updatingCategory === cat}
-                          >
-                            <Camera size={18} />
-                            <span style={{ marginLeft: 8, fontSize: '0.85rem' }}>
-                              {updatingCategory === cat ? 'Enviando...' : 'Alterar Foto'}
-                            </span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td style={{ textAlign: 'right' }}>
+                          <div className="manage-actions" style={{ justifyContent: 'flex-end', gap: 8 }}>
+                            <button
+                              className="btn btn-outline"
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', fontSize: '0.85rem' }}
+                              onClick={() => handleToggleHideCategory(cat)}
+                              disabled={isToggling}
+                              title={isHidden ? 'Exibir na tela inicial' : 'Ocultar da tela inicial'}
+                            >
+                              {isHidden ? (
+                                <>
+                                  <Eye size={15} color="var(--accent)" />
+                                  <span>{isToggling ? 'Salvando...' : 'Exibir'}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <EyeOff size={15} color="#ef4444" />
+                                  <span>{isToggling ? 'Salvando...' : 'Ocultar'}</span>
+                                </>
+                              )}
+                            </button>
+
+                            <input
+                              type="file"
+                              accept="image/jpeg, image/png, image/webp"
+                              style={{ display: 'none' }}
+                              ref={el => { categoryImageRefs.current[cat] = el; }}
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleUpdateCategoryImage(cat, file);
+                              }}
+                            />
+                            <button 
+                              className="btn btn-outline" 
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', fontSize: '0.85rem' }}
+                              title="Alterar imagem de fundo"
+                              onClick={() => categoryImageRefs.current[cat]?.click()}
+                              disabled={updatingCategory === cat}
+                            >
+                              <Camera size={15} />
+                              <span>
+                                {updatingCategory === cat ? 'Enviando...' : 'Foto'}
+                              </span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
