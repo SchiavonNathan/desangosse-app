@@ -203,33 +203,27 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="main-category-grid animate-fade-in">
-            {CATEGORIES.map(({ key, label, icon: Icon }) => {
-              const count = pdfs.filter((p) => p.category === key).length;
-              return (
-                <div
-                  key={key}
-                  className="main-category-card"
-                  onClick={() => navigate(`/dashboard?category=${encodeURIComponent(key)}`)}
-                >
-                  <div className="main-category-card-info">
-                    <h3>{label}</h3>
-                    <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
-                  </div>
-                  <div className="main-category-card-icon">
-                    <img 
-                      src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(key)}?t=${Date.now()}`)} 
-                      alt={label} 
-                      className="main-category-card-img" 
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling?.removeAttribute('style');
-                      }} 
-                    />
-                    <Icon size={34} color="var(--accent)" style={{ display: 'none' }} />
-                  </div>
+            {CATEGORIES.filter((c) => !hiddenCategories.includes(c.key)).map(({ key, label, icon: Icon }) => (
+              <div
+                key={key}
+                className="main-category-card"
+                onClick={() => navigate(`/dashboard?category=${encodeURIComponent(key)}`)}
+                title={label}
+              >
+                <div className="main-category-card-icon">
+                  <img 
+                    src={resolveApiUrl(`/categories/find-image/${encodeURIComponent(key)}?t=${Date.now()}`)} 
+                    alt={label} 
+                    className="main-category-card-img" 
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.removeAttribute('style');
+                    }} 
+                  />
+                  <Icon size={48} color="var(--accent)" style={{ display: 'none' }} />
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
       </Layout>
@@ -283,6 +277,7 @@ export default function Dashboard() {
                     <h3>{sub.name}</h3>
                     <span>{count} {count === 1 ? 'documento' : 'documentos'}</span>
                   </div>
+                  <ChevronRight size={20} className="category-card-arrow" />
                 </div>
               );
             })}
