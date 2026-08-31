@@ -1,7 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import * as FileSystem from 'expo-file-system/legacy';
 import api from '../services/api';
-import { getLocalPdfs, insertOrUpdatePdf, deletePdf } from '../database/schema';
+import { getLocalPdfs, insertOrUpdatePdf, deletePdf, saveHiddenCategories } from '../database/schema';
 
 interface ApiPdf {
   id: string;
@@ -30,6 +30,15 @@ export async function syncPdfs() {
   isSyncing = true;
   try {
     console.log('[SyncService] Online. Starting sync...');
+    try {
+      const hiddenRes = await api.get<string[]>('/categories/hidden');
+      if (hiddenRes.data && Array.isArray(hiddenRes.data)) {
+        await saveHiddenCategories(hiddenRes.data);
+        console.log('[SyncService] Categorias ocultas sincronizadas:', hiddenRes.data);
+      }
+    } catch (e) {
+      console.log('[SyncService] Erro ao sincronizar categorias ocultas', e);
+    }
     const response = await api.get<ApiPdf[]>('/pdfs');
     const remotePdfs = response.data;
     

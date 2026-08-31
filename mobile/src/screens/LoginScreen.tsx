@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import api from '../services/api';
 
@@ -11,7 +11,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      Alert.alert('Erro', 'Preencha usuário e senha.');
+      Alert.alert('Atenção', 'Preencha usuário e senha.');
       return;
     }
 
@@ -31,12 +31,16 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       <View style={styles.card}>
-        <View style={styles.iconContainer}>
+        <View style={styles.logoWrapper}>
           <Image source={require('../../assets/desangosse.png')} style={styles.logo} resizeMode="contain" />
         </View>
-        <Text style={styles.title}>DE SANGOSSE by DSG</Text>
+        <Text style={styles.title}>DE SANGOSSE</Text>
+        <Text style={styles.subtitle}>by DSG • Documentos & Tabelas</Text>
 
         <TextInput
           style={styles.input}
@@ -55,15 +59,20 @@ export default function LoginScreen() {
           secureTextEntry
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+        <TouchableOpacity 
+          style={[styles.button, loading && styles.buttonDisabled]} 
+          onPress={handleLogin} 
+          disabled={loading}
+          activeOpacity={0.8}
+        >
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Entrar</Text>
+            <Text style={styles.buttonText}>Entrar no App</Text>
           )}
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -72,54 +81,64 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f1f5f9',
     justifyContent: 'center',
-    padding: 20,
+    padding: 24,
   },
   card: {
     backgroundColor: 'white',
-    padding: 24,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
+    padding: 28,
+    borderRadius: 20,
+    shadowColor: '#0A422D',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 6,
   },
-  iconContainer: {
+  logoWrapper: {
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   logo: {
-    width: 140,
-    height: 140,
+    width: 160,
+    height: 110,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1e293b',
+    color: '#0A422D',
     textAlign: 'center',
-    marginBottom: 8,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#64748b',
     textAlign: 'center',
+    marginTop: 4,
     marginBottom: 24,
   },
   input: {
     backgroundColor: '#f8fafc',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#e2e8f0',
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: 12,
+    padding: 14,
     marginBottom: 16,
     fontSize: 16,
+    color: '#1e293b',
   },
   button: {
-    backgroundColor: '#6366f1',
-    padding: 14,
-    borderRadius: 8,
+    backgroundColor: '#0A422D',
+    padding: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 6,
+    shadowColor: '#0A422D',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
   },
   buttonText: {
     color: 'white',

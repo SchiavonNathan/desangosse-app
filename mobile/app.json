@@ -4,24 +4,27 @@
     "slug": "desangosse-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/desangosse.png",
     "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/desangosse.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "primaryColor": "#0A422D",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/desangosse.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.nathanschiavon.desangosse"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/desangosse.png"
     },
     "plugins": [
       "expo-sqlite",

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
-import api from '../services/api';
+import api, { setUnauthorizedCallback } from '../services/api';
 
 interface User {
   id: string;
@@ -48,3 +48,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 }));
+
+
+// Register automatic logout on 401 without circular import
+setUnauthorizedCallback(() => {
+  useAuthStore.getState().logout();
+});

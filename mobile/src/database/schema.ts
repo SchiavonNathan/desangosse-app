@@ -15,6 +15,10 @@ export async function initDatabase() {
       subcategoryId TEXT,
       subcategoryName TEXT
     );
+    CREATE TABLE IF NOT EXISTS app_settings (
+      key TEXT PRIMARY KEY NOT NULL,
+      value TEXT NOT NULL
+    );
   `);
 
   // Safe migrations — ignore errors if column already exists
@@ -53,4 +57,27 @@ export async function insertOrUpdatePdf(pdf: { id: string, name: string, hash: s
 export async function deletePdf(id: string) {
   const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
   await db.runAsync('DELETE FROM local_pdfs WHERE id = ?', id ?? null);
+}
+
+
+export async function saveHiddenCategories(hidden: string[]) {
+  const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
+  await db.runAsync(
+    `INSERT INTO app_settings (key, value) VALUES ('hidden_categories', ?)
+     ON CONFLICT(key) DO UPDATE SET value=excluded.value`,
+    JSON.stringify(hidden)
+  );
+}
+
+export async function getLocalHiddenCategories(): Promise<string[]> {
+  try {
+    const db = await SQLite.openDatabaseAsync('pdfs.db', { useNewConnection: true });
+    const row: any = await db.getFirstAsync("SELECT value FROM app_settings WHERE key = 'hidden_categories'");
+    if (row && row.value) {
+      return JSON.parse(row.value);
+    }
+  } catch (e) {
+    console.error('Error reading hidden categories from SQLite', e);
+  }
+  return [];
 }

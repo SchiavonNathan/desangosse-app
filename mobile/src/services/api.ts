@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
+
+let unauthorizedCallback: (() => void) | null = null;
+
+export const setUnauthorizedCallback = (callback: () => void) => {
+  unauthorizedCallback = callback;
+};
 
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL || 'https://cht-desangosse.com.br/api',
@@ -8,9 +13,8 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      const logout = useAuthStore.getState().logout;
-      if (logout) logout();
+    if (error.response?.status === 401 && unauthorizedCallback) {
+      unauthorizedCallback();
     }
     return Promise.reject(error);
   }
