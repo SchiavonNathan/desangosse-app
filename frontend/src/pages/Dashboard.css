@@ -54,14 +54,15 @@
   width: 100%;
   height: 100%;
   flex: 1;
-  min-height: 0; /* critical: allows the flex child to shrink below content size */
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-subtle);
+  background: var(--surface);
   transition: background var(--transition);
   overflow: hidden;
   border-radius: inherit;
+  padding: 6px;
 }
 
 .main-category-card:hover .main-category-card-icon {
@@ -71,7 +72,7 @@
 .main-category-card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   border-radius: inherit;
 }
