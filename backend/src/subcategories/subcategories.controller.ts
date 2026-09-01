@@ -14,7 +14,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 
-const MAX_ICON_SIZE = 2 * 1024 * 1024; // 2 MB
+const MAX_ICON_SIZE = 20 * 1024 * 1024; // 20 MB // 2 MB
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 // ---- Public controller (listing) ----

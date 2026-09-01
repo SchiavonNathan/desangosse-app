@@ -14,7 +14,7 @@ import { createHash } from 'crypto';
 import * as fs from 'fs';
 import { PrismaService } from '../prisma/prisma.service';
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200 MB // 10 MB
 const ALLOWED_EXTS = ['.pdf', '.xlsx'];
 const MIME_TYPES = {
   '.pdf': 'application/pdf',

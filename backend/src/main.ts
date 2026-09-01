@@ -1,3 +1,4 @@
+import { json, urlencoded } from 'express';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -9,6 +10,10 @@ async function bootstrap() {
   // Trust proxy — needed for @nestjs/throttler to correctly read client IP
   // behind reverse proxies (nginx, Cloudflare, etc.)
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
+  // Increase JSON and URL-encoded body size limits for large files
+  app.use(json({ limit: '200mb' }));
+  app.use(urlencoded({ limit: '200mb', extended: true }));
 
   // ── Security Headers (Helmet) ────────────────────────────────────────
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
