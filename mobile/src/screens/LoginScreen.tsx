@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import api from '../services/api';
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState('');
+  const { login, lastUsername } = useAuthStore();
+  const [username, setUsername] = useState(lastUsername || '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const login = useAuthStore(state => state.login);
+
+  useEffect(() => {
+    if (lastUsername && !username) {
+      setUsername(lastUsername);
+    }
+  }, [lastUsername]);
 
   const handleLogin = async () => {
     if (!username || !password) {
